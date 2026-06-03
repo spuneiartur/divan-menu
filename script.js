@@ -124,9 +124,9 @@ const DISCOVER = {
     pill: "Vezi în meniu", goItem: "steak"
   },
   pairings: [
-    { emoji: "🍷", tag: "Pairing", name: "Ribeye + Fetească Neagră", text: "Taninele vinului echilibrează grăsimea cărnii maturate." },
-    { emoji: "🍝", tag: "Pairing", name: "Tagliatelle cu trufe + Flat white", text: "Un final aromat — cafeaua specialty taie din cremozitate." },
-    { emoji: "🍮", tag: "Sweet match", name: "Sticky toffee + Sorbet", text: "Cald & rece, o combinație clasică de desert." },
+    { tag: "Pairing", title: "Ribeye + Fetească Neagră", text: "Taninele vinului echilibrează grăsimea cărnii maturate.", a: "steak", b: "wine" },
+    { tag: "Pairing", title: "Tagliatelle cu trufe + Flat white", text: "Cafeaua specialty taie din cremozitate — un final aromat.", a: "pasta", b: "coffee" },
+    { tag: "Sweet match", title: "Sticky toffee + Sorbet", text: "Cald & rece, contrastul clasic de final de masă.", a: "toffee", b: "sorbet" },
   ]
 };
 
@@ -276,11 +276,21 @@ function renderDiscover() {
       </div>
     </div>`;
 
-  const pairings = d.pairings.map(p => `
-    <div class="d-card"><div class="d-pair">
-      <div class="d-pair-emoji">${p.emoji}</div>
-      <div><small>${p.tag}</small><h4>${p.name}</h4><p>${p.text}</p></div>
-    </div></div>`).join("");
+  const half = (it) => `<div class="pair-half">
+      <img src="${it.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+      <div class="pair-fb">${it.emoji}</div>
+    </div>`;
+  const pairings = d.pairings.map(p => {
+    const A = itemById[p.a], B = itemById[p.b];
+    return `<div class="pair-card" data-pair="${p.a}">
+      <div class="pair-split">${half(A)}${half(B)}</div>
+      <div class="pair-seam"></div>
+      <div class="pair-plus">+</div>
+      <div class="pair-scrim"></div>
+      <span class="pair-kicker">${p.tag}</span>
+      <div class="pair-overlay"><h4>${p.title}</h4><p>${p.text}</p></div>
+    </div>`;
+  }).join("");
 
   $("#discoverBody").innerHTML =
     heroCard(d.event) +
@@ -292,6 +302,7 @@ function renderDiscover() {
     if (b.dataset.discoverCta) { switchView("menu"); setTimeout(() => openItem(b.dataset.discoverCta), 250); }
     else { switchView("waiter"); sendRequest("waiter"); }
   }));
+  $$("[data-pair]").forEach(c => c.addEventListener("click", () => openItem(c.dataset.pair)));
 }
 
 /* ---------- Render: Waiter ---------- */
