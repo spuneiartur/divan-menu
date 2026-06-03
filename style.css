@@ -191,7 +191,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px 12px;
+  padding: calc(env(safe-area-inset-top) + 18px) 18px 12px;
   background: var(--bg);
 }
 .brand { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -210,7 +210,7 @@ body {
 }
 .lang-btn .flag { font-size: 15px; }
 
-.app-header.simple { flex-direction: column; align-items: flex-start; gap: 2px; padding: 18px 18px 8px; }
+.app-header.simple { flex-direction: column; align-items: flex-start; gap: 2px; padding: calc(env(safe-area-inset-top) + 22px) 18px 8px; }
 .app-header.simple h2 { font-family: var(--font-head); font-size: 28px; font-weight: 600; letter-spacing: -.02em; }
 .app-header.simple .sub { font-size: 13.5px; color: var(--ink-soft); }
 
@@ -328,8 +328,7 @@ body {
   position: sticky; top: 0; z-index: 20;
   display: flex; gap: 6px;
   padding: 10px 18px;
-  background: rgba(250,247,242,.92);
-  backdrop-filter: blur(8px);
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   scrollbar-width: none;
