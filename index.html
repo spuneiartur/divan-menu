@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1f1b16" />
+  <title>Divan · Meniu digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<!-- 🎨 TEMĂ: schimbă paleta dintr-un singur loc — "clean" | "warm" | "green" | "gold"
+     (definițiile sunt în style.css, secțiunea „TEME") -->
+<body data-theme="clean">
+  <!-- Device frame (presentation chrome on desktop) -->
+  <div class="stage">
+    <div class="device">
+      <div class="status-bar">
+        <span class="sb-time">12:02</span>
+        <span class="sb-icons">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="1" fill="currentColor"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="currentColor"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="currentColor"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M8 2.2c2.1 0 4 .8 5.4 2.1l1.1-1.2C13 1.5 10.6.5 8 .5S3 1.5 1.5 3.1l1.1 1.2C4 3 5.9 2.2 8 2.2Z" fill="currentColor"/><path d="M8 5.4c1.2 0 2.3.5 3.1 1.3l1.1-1.2A6 6 0 0 0 8 3.7a6 6 0 0 0-4.2 1.8l1.1 1.2A4.4 4.4 0 0 1 8 5.4Z" fill="currentColor"/><circle cx="8" cy="9" r="1.6" fill="currentColor"/></svg>
+          <span class="sb-batt"><span class="sb-batt-fill"></span></span>
+        </span>
+      </div>
+
+      <!-- App root -->
+      <main id="app">
+
+        <!-- ============ MENU VIEW ============ -->
+        <section class="view view-menu active" id="view-menu">
+          <header class="app-header">
+            <div class="brand">
+              <img class="brand-logo" src="divan-logo.png" alt="Divan" />
+              <span class="table-tag">Masa 12 · Salon</span>
+            </div>
+            <button class="lang-btn" id="langBtn">
+              <span class="flag">🇷🇴</span> RO
+            </button>
+          </header>
+
+          <!-- Promo strip — discreet, dismissible, doesn't steal menu focus -->
+          <div class="promo-strip" id="promoStrip">
+            <video class="promo-video" autoplay muted loop playsinline preload="auto">
+              <source src="wine-tasting.mp4" type="video/mp4" />
+            </video>
+            <div class="promo-scrim"></div>
+            <button class="promo-close" id="promoClose" aria-label="Închide">✕</button>
+            <div class="promo-tag">Astăzi</div>
+            <p class="promo-text">Seară de vinuri naturale — degustare 19:00</p>
+            <button class="promo-link" data-go="discover">Vezi în Descoperă →</button>
+          </div>
+
+          <div class="search-wrap">
+            <div class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="text" id="searchInput" placeholder="Caută în meniu — burger, vegan, vin…" />
+              <button class="search-clear" id="searchClear" hidden>✕</button>
+            </div>
+          </div>
+
+          <!-- Diet / preference filters -->
+          <div class="filters" id="filters">
+            <button class="chip" data-filter="vegetarian">🌱 Vegetarian</button>
+            <button class="chip" data-filter="vegan">🥦 Vegan</button>
+            <button class="chip" data-filter="gluten-free">🌾 Fără gluten</button>
+            <button class="chip" data-filter="lactose-free">🥛 Fără lactoză</button>
+            <button class="chip" data-filter="spicy">🌶️ Picant</button>
+            <button class="chip" data-filter="popular">⭐ Populare</button>
+          </div>
+
+          <!-- Sticky category nav -->
+          <nav class="cat-nav" id="catNav"></nav>
+
+          <!-- Menu list -->
+          <div class="menu-list" id="menuList"></div>
+
+          <div class="menu-empty" id="menuEmpty" hidden>
+            <span>🍽️</span>
+            <p>Niciun produs nu se potrivește filtrelor selectate.</p>
+            <button class="btn-ghost" id="clearFilters">Resetează filtrele</button>
+          </div>
+        </section>
+
+        <!-- ============ DISCOVER VIEW ============ -->
+        <section class="view view-discover" id="view-discover">
+          <header class="app-header simple">
+            <h2>Descoperă</h2>
+            <p class="sub">Recomandări, pairing-uri & evenimente</p>
+          </header>
+          <div class="discover-body" id="discoverBody"></div>
+        </section>
+
+        <!-- ============ WAITER VIEW ============ -->
+        <section class="view view-waiter" id="view-waiter">
+          <header class="app-header simple">
+            <h2>Ospătar</h2>
+            <p class="sub">Cereri rapide — fără să te ridici de la masă</p>
+          </header>
+          <div class="waiter-body">
+            <div class="waiter-status" id="waiterStatus" hidden></div>
+            <div class="req-grid" id="reqGrid"></div>
+            <div class="waiter-note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Cererile ajung direct la ospătarul mesei tale. Nimic nu se trimite în bucătărie.</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Floating draft bar -->
+      <div class="draft-bar" id="draftBar" hidden>
+        <div class="draft-bar-info">
+          <span class="draft-count" id="draftCount">0</span>
+          <span class="draft-label">în lista ta</span>
+        </div>
+        <button class="draft-bar-btn" id="openDraft">
+          Vezi selecția
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Bottom tab nav -->
+      <nav class="tab-bar">
+        <button class="tab active" data-view="menu">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5v-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <span>Meniu</span>
+        </button>
+        <button class="tab" data-view="discover">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.6 4.9a2 2 0 0 0 1.3 1.3L20 11l-4.9 1.6a2 2 0 0 0-1.3 1.3L12 19l-1.6-4.9a2 2 0 0 0-1.3-1.3L4 11l4.9-1.6a2 2 0 0 0 1.3-1.3L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          <span>Descoperă</span>
+        </button>
+        <button class="tab" data-view="waiter">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 10a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Ospătar</span>
+        </button>
+      </nav>
+
+      <!-- Item detail sheet -->
+      <div class="sheet-overlay" id="itemSheet" hidden>
+        <div class="sheet" id="itemSheetInner"></div>
+      </div>
+
+      <!-- Draft sheet -->
+      <div class="sheet-overlay" id="draftSheet" hidden>
+        <div class="sheet sheet-tall" id="draftSheetInner"></div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast" hidden></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
