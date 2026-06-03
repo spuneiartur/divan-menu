@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#1f1b16" />
+  <meta name="theme-color" content="#ffffff" />
+  <!-- Mod „standalone" când e adăugat pe Home Screen — atunci safe-area (Dynamic Island / home bar) devine relevant -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Divan" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Divan · Meniu digital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,6 +21,9 @@
   <!-- Device frame (presentation chrome on desktop) -->
   <div class="stage">
     <div class="device">
+      <!-- iPhone Dynamic Island (doar în preview-ul desktop) -->
+      <div class="island" aria-hidden="true"></div>
+
       <!-- App root -->
       <main id="app">
 
@@ -141,6 +149,9 @@
 
       <!-- Toast -->
       <div class="toast" id="toast" hidden></div>
+
+      <!-- iPhone home indicator (doar în preview-ul desktop) -->
+      <div class="home-indicator" aria-hidden="true"></div>
     </div>
   </div>
 
