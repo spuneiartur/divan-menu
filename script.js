@@ -307,14 +307,31 @@ function renderDiscover() {
 
 /* ---------- Render: Waiter ---------- */
 function renderWaiter() {
-  $("#reqGrid").innerHTML = REQUESTS.map(r => `
-    <button class="req ${r.primary ? "primary" : ""}" data-req="${r.id}">
+  $("#reqGrid").innerHTML = REQUESTS.map(r => {
+    if (r.primary) {
+      // Buton principal cu fundal video — fără iconă
+      return `
+      <button class="req primary" data-req="${r.id}">
+        <video class="req-video" autoplay muted loop playsinline preload="auto">
+          <source src="wine-tasting.mp4" type="video/mp4" />
+        </video>
+        <span class="req-scrim"></span>
+        <span class="req-content">
+          <span class="req-label">${r.label}</span>
+          ${r.sub ? `<span class="req-sub">${r.sub}</span>` : ""}
+        </span>
+        <svg class="req-bell" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 10a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>`;
+    }
+    return `
+    <button class="req" data-req="${r.id}">
       <span class="req-emoji">${r.emoji}</span>
       <span>
         <span class="req-label">${r.label}</span>
         ${r.sub ? `<span class="req-sub">${r.sub}</span>` : ""}
       </span>
-    </button>`).join("");
+    </button>`;
+  }).join("");
   $$("[data-req]", $("#reqGrid")).forEach(b => b.addEventListener("click", () => sendRequest(b.dataset.req)));
 }
 
